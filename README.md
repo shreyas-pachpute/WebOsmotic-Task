@@ -12,7 +12,7 @@ This project implements an intelligent document processing and querying system u
     *   `POST /api/embedding`: To process and embed documents efficiently.
     *   `POST /api/query`: To query embedded documents, receive answers with citations, and track conversation history.
 *   **State-of-the-Art Model Stack**:
-    *   **LLM**: Google Gemini (specifically `gemini-1.5-flash-latest`).
+    *   **LLM**: Google Gemini (specifically `gemini-2.0-flash`).
     *   **Embedding Model**: `sentence-transformers/all-MiniLM-L6-v2`.
     *   **Re-ranker Model**: `BAAI/bge-reranker-base`.
     *   **Vector Store**: ChromaDB.
@@ -24,7 +24,7 @@ The selection of technologies was driven by the core requirements of building a 
 
 ### 1. Backend Framework: FastAPI
 *   **Justification**: FastAPI was chosen for its:
-    *   **High Performance**: Built on Starlette and Pydantic, it offers asynchronous capabilities (ASGI) ideal for I/O-bound operations like file processing, OCR, and calls to external LLM APIs, ensuring responsive API endpoints. [7, 13, 20, 21]
+    *   **High Performance**: Built on Starlette and Pydantic, it offers asynchronous capabilities (ASGI) ideal for I/O-bound operations like file processing, OCR, and calls to external LLM APIs, ensuring responsive API endpoints. 
     *   **Developer Efficiency**: Automatic data validation, serialization/deserialization via Pydantic models significantly reduces boilerplate and enhances data integrity.
     *   **Automatic API Documentation**: Built-in support for OpenAPI (Swagger UI) and ReDoc simplifies API contract definition and testing, directly addressing a deliverable requirement.
     *   **Python Ecosystem**: Leverages Python's extensive AI/ML libraries seamlessly.
@@ -37,22 +37,22 @@ The selection of technologies was driven by the core requirements of building a 
 
 ### 3. Model Stack Details
 
-#### a. Large Language Model (LLM): Google Gemini (`gemini-1.5-flash-latest`)
-*   **Choice**: `gemini-1.5-flash-latest` accessed via the `langchain-google-genai` package. [1, 3, 4]
+#### a. Large Language Model (LLM): Google Gemini (`gemini-2.0-flash`)
+*   **Choice**: `gemini-2.0-flash` accessed via the `langchain-google-genai` package. 
 *   **Justification**:
     *   **Advanced Reasoning and Comprehension**: Gemini models are known for their strong language understanding, reasoning capabilities, and ability to follow complex instructions, which is crucial for generating accurate, contextual answers.
-    *   **Performance and Cost Balance**: The `gemini-1.5-flash-latest` variant is optimized for speed and efficiency, making it suitable for interactive chatbot applications while offering a good balance of capability and operational cost.
+    *   **Performance and Cost Balance**: The `gemini-2.0-flash` variant is optimized for speed and efficiency, making it suitable for interactive chatbot applications while offering a good balance of capability and operational cost.
     *   **Large Context Window**: Gemini models typically support large context windows, beneficial for RAG systems that might feed substantial contextual information.
-    *   **Seamless LangChain Integration**: Well-supported within the LangChain ecosystem for straightforward integration and prompt management. [1, 2]
-    *   **Accessibility**: Readily available via Google AI Studio API, simplifying setup for development. [5, 24]
+    *   **Seamless LangChain Integration**: Well-supported within the LangChain ecosystem for straightforward integration and prompt management. 
+    *   **Accessibility**: Readily available via Google AI Studio API, simplifying setup for development. 
 
 #### b. Embedding Model: `sentence-transformers/all-MiniLM-L6-v2`
-*   **Choice**: `sentence-transformers/all-MiniLM-L6-v2` utilized through `langchain-huggingface.HuggingFaceEmbeddings`. [6, 25, 27, 28]
+*   **Choice**: `sentence-transformers/all-MiniLM-L6-v2` utilized through `langchain-huggingface.HuggingFaceEmbeddings`. 
 *   **Justification**:
     *   **High Retrieval Performance & Efficiency**: This model provides an excellent balance between embedding quality (ranking highly on benchmarks like MTEB for retrieval tasks) and computational efficiency (small size, fast inference). This is vital for quick document processing and query embedding.
     *   **Open Source & Local Execution**: Being open-source, it offers full control and avoids API costs for embeddings. Its small footprint allows for easy local execution.
     *   **Broad Applicability**: Suitable for a wide range of general-purpose text similarity and retrieval tasks.
-    *   **LangChain Integration**: Standard and straightforward integration via `HuggingFaceEmbeddings`. [6]
+    *   **LangChain Integration**: Standard and straightforward integration via `HuggingFaceEmbeddings`. 
 
 #### c. Re-ranker Model: `BAAI/bge-reranker-base`
 *   **Choice**: `BAAI/bge-reranker-base` utilized via `sentence_transformers.cross_encoder.CrossEncoder`.
@@ -75,13 +75,13 @@ The selection of technologies was driven by the core requirements of building a 
 
 ### 5. Document Parsing & OCR: `unstructured` & Tesseract
 *   **`unstructured` Library**:
-    *   **Justification**: Addresses the core requirement of handling multiple document formats (PDF, DOCX, TXT). [29, 30, 32]
+    *   **Justification**: Addresses the core requirement of handling multiple document formats (PDF, DOCX, TXT). 
         *   **Versatile Format Support**: Provides a unified interface for parsing various file types.
         *   **OCR Integration**: Seamlessly integrates OCR capabilities (using Tesseract in this project) to extract text from scanned documents and images within files, fulfilling a key project requirement.
         *   **Advanced Partitioning**: Offers intelligent strategies to partition documents into meaningful elements (e.g., titles, paragraphs, lists), which aids in creating better quality chunks. Strategies like `"auto"` (and optional `"hi_res"` with Detectron2 for complex layouts) improve text extraction quality.
         *   **Metadata Extraction**: Capable of extracting useful metadata like page numbers (essential for citations) and element types.
 *   **Tesseract OCR (via `pytesseract` and integrated by `unstructured`)**:
-    *   **Justification**: Provides the OCR engine for the system. [19, 31]
+    *   **Justification**: Provides the OCR engine for the system. 
         *   **Robust & Open Source**: A widely used, free, and effective OCR engine.
         *   **Language Support**: Good support for English (and other languages if needed).
         *   **Baseline Accuracy**: Offers a strong baseline for OCR tasks, sufficient for many scanned documents as required by the project. While specialized cloud OCRs might offer higher accuracy on extremely challenging documents, Tesseract is a practical choice for this project's scope.
@@ -170,7 +170,7 @@ These interfaces provide detailed information about the API endpoints, request/r
 ## Setup Instructions
 
 1.  **Prerequisites**:
-    *   Python 3.8+ (developed with Python 3.11/3.12 in mind, 3.13 caused some initial build issues with dependencies).
+    *   Python 3.8+.
     *   **Tesseract OCR Engine**: Must be installed and accessible in your system's PATH.
         *   **Linux (Ubuntu/Debian)**: `sudo apt-get install tesseract-ocr libtesseract-dev tesseract-ocr-eng` (and other language packs like `tesseract-ocr-[lang]`).
         *   **macOS**: `brew install tesseract tesseract-lang`.
@@ -179,15 +179,14 @@ These interfaces provide detailed information about the API endpoints, request/r
 
 2.  **Clone the Repository**:
     ```bash
-    git clone <your-repo-url>
-    cd document_rag_system
+    git clone https://github.com/shreyas-pachpute/WebOsmotic-Task
     ```
 
 3.  **Create and Activate a Virtual Environment**:
     ```bash
     python -m venv venv
     # On Linux/macOS:
-    source venv/bin/activate
+    # source venv/bin/activate
     # On Windows (Command Prompt):
     # venv\Scripts\activate
     # On Windows (PowerShell):
@@ -210,12 +209,12 @@ These interfaces provide detailed information about the API endpoints, request/r
         GOOGLE_API_KEY="YOUR_GOOGLE_AI_STUDIO_API_KEY"
         CHROMA_PERSIST_DIRECTORY="./chroma_db_store"
         EMBEDDING_MODEL_NAME="sentence-transformers/all-MiniLM-L6-v2" # Default, used by EmbeddingService
-        LLM_MODEL_NAME="gemini-1.5-flash-latest" # Default, used by QAService
+        LLM_MODEL_NAME="gemini-2.0-flash" # Default, used by QAService
         CHUNK_SIZE=1000 # Default, used by DocumentProcessor
         CHUNK_OVERLAP=200 # Default, used by DocumentProcessor
         DETECTRON2_OPTIMIZED=false # Set to true ONLY if Detectron2 is properly installed and you want unstructured to use it for hi_res PDF strategy
         ```
-    *   Obtain your `GOOGLE_API_KEY` from [Google AI Studio](https://aistudio.google.com/app/apikey). [5]
+    *   Obtain your `GOOGLE_API_KEY` from [Google AI Studio](https://aistudio.google.com/app/apikey). 
 
 6.  **Run the Application**:
     ```bash
@@ -265,8 +264,8 @@ The system was tested with documents from each category specified in the problem
 
 1.  **Academic/Technical**:
     *   **Research Paper (PDF)**:
-        *   *Test Document Example:* `[Name/Link to a specific, publicly available research paper, e.g., "Attention Is All You Need" arXiv paper]`
-        *   *Observations:* Successfully ingested multi-column layout. Text extraction quality was [Good/Fair/Excellent]. Queries regarding methodology and conclusions were answered [accurately/with minor issues] with correct citations. OCR was [not needed/tested on figures/tables if applicable].
+        *   *Test Document Example:* `https://www.researchgate.net/publication/371426909_Research_Paper_on_Artificial_Intelligence`
+        *   *Observations:* Successfully ingested multi-column layout. Text extraction quality was Good. Queries regarding methodology and conclusions were answered accurately with correct citations. OCR was not needed.
     *   **Technical Documentation (DOCX)**:
         *   *Test Document Example:* `[Name of a sample technical manual or documentation section, e.g., "Python argparse documentation saved as DOCX"]`
         *   *Observations:* Handled structured text, code blocks (as text), and headings well. Inline images (if any) were [ignored/processed by OCR - specify]. Queries about specific functions/features yielded [accurate/relevant] answers.
