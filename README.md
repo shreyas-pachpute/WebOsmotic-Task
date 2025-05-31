@@ -31,7 +31,7 @@ Final Answer with Citations
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/document-intelligence-rag.git
+git clone https://github.com/shreyas-pachpute/WebOsmotic-Task.git
 cd document-intelligence-rag
 ```
 
